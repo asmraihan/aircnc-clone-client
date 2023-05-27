@@ -1,5 +1,5 @@
 import { AiOutlineMenu } from 'react-icons/ai'
-// import Avatar from './Avatar'
+import Avatar from './Avatar'
 import { useCallback, useContext, useState } from 'react'
 import { AuthContext } from '../../../providers/AuthProvider'
 import { Link } from 'react-router-dom'
@@ -22,12 +22,12 @@ const MenuDropdown = () => {
         >
           <AiOutlineMenu />
           <div className='hidden md:block'>
-            {/* <Avatar /> */}
+            <Avatar />
           </div>
         </div>
       </div>
       {isOpen && (
-        <div className='absolute rounded-xl shadow-md w-[40vw] md:w-3/4 bg-white overflow-hidden right-0 top-12 text-sm'>
+        <div className='absolute rounded-xl shadow-md w-[40vw] md:w-3/4 bg-white overflow-hidden right-0 top-12 text-sm '>
           <div className='flex flex-col cursor-pointer'>
             <Link
               to='/'
