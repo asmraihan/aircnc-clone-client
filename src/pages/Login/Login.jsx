@@ -1,7 +1,7 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { FcGoogle } from 'react-icons/fc'
-import { useContext } from 'react'
+import { useContext, useRef } from 'react'
 import { AuthContext } from '../../providers/AuthProvider'
 import {TbFidgetSpinner} from 'react-icons/tb'
 import { set } from 'date-fns'
@@ -12,20 +12,52 @@ const Login = () => {
     signIn,
     signInWithGoogle,
     resetPassword } = useContext(AuthContext)
-
   const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from?.pathname || '/'
+  
+  const emailRef = useRef()
+    // handleSubmit
+    const handleSubmit = (event) => {
+      event.preventDefault()
+      const email = event.target.email.value
+      const password = event.target.password.value
+      signIn(email, password)
+      .then((result) => {
+        console.log(result.user)
+        navigate(from,{replace:true})
+      }).catch((error) => {
+        console.log(error.message)
+        toast.error(error.message)
+        setLoading(false)
+      })
+    }
 
   const handleGoogleSignIn = () => {
     signInWithGoogle()
       .then((result) => {
         console.log(result.user)
-        navigate('/')
+        navigate(from,{replace:true})
       }).catch((error) => {
         console.log(error.message)
         toast.error(error.message)
         setLoading(false)
       })
   }
+  // handle reset password
+  const handleReset = () => {
+    const email = emailRef.current.value
+    resetPassword(email)
+    .then(() => {
+      toast.success('Check your email for reset link')
+      setLoading(false)
+    }).catch((error) => {
+      console.log(error.message)
+      toast.error(error.message)
+      setLoading(false)
+    })
+  }
+
   return (
     <div className='flex justify-center items-center min-h-screen'>
       <div className='flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900'>
@@ -36,6 +68,7 @@ const Login = () => {
           </p>
         </div>
         <form
+          onSubmit={handleSubmit}
           noValidate=''
           action=''
           className='space-y-6 ng-untouched ng-pristine ng-valid'
@@ -46,6 +79,7 @@ const Login = () => {
                 Email address
               </label>
               <input
+                ref={emailRef}
                 type='email'
                 name='email'
                 id='email'
@@ -82,7 +116,7 @@ const Login = () => {
           </div>
         </form>
         <div className='space-y-1'>
-          <button className='text-xs hover:underline hover:text-rose-500 text-gray-400'>
+          <button onClick={handleReset} className='text-xs hover:underline hover:text-rose-500 text-gray-400'>
             Forgot password?
           </button>
         </div>
