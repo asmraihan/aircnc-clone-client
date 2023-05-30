@@ -1,8 +1,9 @@
 import React from 'react';
-import Container from '../Container/Container';
+
 import Logo from './Logo';
 import Search from './Search';
 import MenuDropdown from './MenuDropDown';
+import Container from '../Container';
 
 const NavBar = () => {
     return (
