@@ -3,12 +3,12 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import qs from 'query-string'
 const CategoryBox = ({ label, icon: Icon }) => {
     const [params, setParams] = useSearchParams()
-    const value = params.get('category')
     const navigate = useNavigate()
     const handleClick = () => {
         let currentQuery = {}
         if(params){
             currentQuery = qs.parse(params.toString())
+           
         }
         const updatedQuery = {
             ...currentQuery, 
