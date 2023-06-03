@@ -3,6 +3,7 @@ import AddRoomForm from '../../components/Forms/AddRoomForm';
 import { set } from 'date-fns';
 import { imageUpload } from '../../api/utils';
 import { AuthContext } from '../../providers/AuthProvider';
+import { addRoom } from '../../api/rooms';
 
 const AddRoom = () => {
     const {user} = useContext(AuthContext)
@@ -48,7 +49,8 @@ const AddRoom = () => {
                 },
                 category,
               }
-                console.log(roomData)
+              //   post roomData to server
+              addRoom(roomData).then(data=> console.log(data)).catch(err=>console.log(err.message))
             setLoading(false)
         
         }).catch(err => {
