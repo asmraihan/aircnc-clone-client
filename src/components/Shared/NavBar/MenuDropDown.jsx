@@ -4,6 +4,8 @@ import { useCallback, useContext, useState } from 'react'
 import { AuthContext } from '../../../providers/AuthProvider'
 import { Link } from 'react-router-dom'
 import HostModal from '../../Modal/HostRequestModal'
+import { becomeHost } from '../../../api/auth'
+import { toast } from 'react-hot-toast'
 
 const MenuDropdown = () => {
   const { user, logOut } = useContext(AuthContext)
@@ -12,9 +14,13 @@ const MenuDropdown = () => {
   const toggleOpen = useCallback(() => {
     setIsOpen(value => !value)
   }, [])
-  
+
   const modalHandler=(email)=>{
-    console.log('modal clicked')
+   becomeHost(email).then(data=> {
+    console.log(data)
+    toast.success('Your are now host, Add rooms!')
+    closeModal()
+   })
   }
   const closeModal=()=>{
     setModal(false)

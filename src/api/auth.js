@@ -23,7 +23,7 @@ export const becomeHost =(email)=>{
     const currentUser = {
         role: 'host'
     }
-    fetch(`${import.meta.env.VITE_API_URL}/users/${email}`,{
+    return fetch(`${import.meta.env.VITE_API_URL}/users/${email}`,{
         method: 'PUT',
         headers: {
             'content-type': 'application/json'
@@ -31,5 +31,5 @@ export const becomeHost =(email)=>{
         body: JSON.stringify(currentUser)
     })
     .then(res=>res.json())
-    .then(data=>console.log(data))
+   
 }
