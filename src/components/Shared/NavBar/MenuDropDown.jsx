@@ -6,19 +6,19 @@ import { Link } from 'react-router-dom'
 import HostModal from '../../Modal/HostRequestModal'
 import { becomeHost } from '../../../api/auth'
 import { toast } from 'react-hot-toast'
+import { is } from 'date-fns/locale'
 
 const MenuDropdown = () => {
-  const { user, logOut } = useContext(AuthContext)
+  const { user, logOut, role, setRole } = useContext(AuthContext)
   const [isOpen, setIsOpen] = useState(false)
   const [modal, setModal] = useState(false)
-  const toggleOpen = useCallback(() => {
-    setIsOpen(value => !value)
-  }, [])
+  console.log(role)
 
   const modalHandler=(email)=>{
    becomeHost(email).then(data=> {
     console.log(data)
     toast.success('Your are now host, Add rooms!')
+    setRole('host')
     closeModal()
    })
   }
@@ -29,11 +29,13 @@ const MenuDropdown = () => {
   return (
     <div className='relative'>
       <div className='flex flex-row items-center gap-3'>
-        <div onClick={()=>setModal(true)} className='hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer'>
-          AirCNC your home
+        <div className='hidden md:block text-sm font-semibold rounded-full py-3 px-8 transition'>
+      {
+        !role && (  <button onClick={()=>setModal(true)} disabled={!user} className='cursor-pointer hover:bg-neutral-100 '>AirCNC your home</button>)
+      }
         </div>
         <div
-          onClick={toggleOpen}
+          onClick={()=>setIsOpen(!isOpen)}
           className='p-4 md:py-1 md:px-2 border-[1px] border-neutral-200 flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition'
         >
           <AiOutlineMenu />
@@ -60,7 +62,10 @@ const MenuDropdown = () => {
                   Dashboard
                 </Link>
               <div
-                onClick={logOut}
+                onClick={()=>{
+                  setRole(null)
+                  logOut()
+                }}
                 className='px-4 py-3 hover:bg-neutral-100 transition font-semibold cursor-pointer'
               >
                 Logout
