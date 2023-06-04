@@ -4,10 +4,13 @@ import Button from '../Button/Button';
 import { AuthContext } from '../../providers/AuthProvider';
 import BookingModal from '../Modal/BookingModal';
 import { formatDistance } from 'date-fns'
-import { addBooking } from '../../api/bookings';
+import { addBooking, updateStatus } from '../../api/bookings';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const RoomReservation = ({ roomData }) => {
     const { user, role } = useContext(AuthContext)
+    const navigate = useNavigate()
     const totalPrice = parseFloat(formatDistance(new Date(roomData.to), new Date(roomData.from)).split(' ')[0]) * roomData.price
     console.log(totalPrice)
     const [isOpen, setIsOpen] = useState(false)
@@ -33,6 +36,8 @@ const RoomReservation = ({ roomData }) => {
         to: value.endDate,
         from: value.startDate,
         title: roomData.title,
+        roomId: roomData._id,
+        image: roomData.image
     })
     const handleSelect = (ranges) => {
         setValue({ ...value })
@@ -40,9 +45,18 @@ const RoomReservation = ({ roomData }) => {
     const modalHandler = () => {
         addBooking(bookingInfo).then(data => {
             console.log(data)
-            closeModal()
-            toast.success('Booking successful')
-
+            updateStatus(roomData._id, true)
+                .then(data => {
+                    console.log(data)
+                    toast.success('Booking successful')
+                    navigate('/dashboard/my-bookings')
+                    closeModal()
+                })
+                .catch(err => {
+                    console.log(err)
+                    closeModal()
+                    toast.error('Booking failed')
+                })
         }).catch(err => {
             console.log(err)
             closeModal()
@@ -66,7 +80,7 @@ const RoomReservation = ({ roomData }) => {
             </div>
             <hr />
             <div className='p-4'>
-                <Button onClick={() => { setIsOpen(true) }} disabled={roomData.host.email === user.email} label='Reserve'></Button>
+                <Button onClick={() => { setIsOpen(true) }} disabled={roomData.host.email === user.email || roomData.booked} label='Reserve'></Button>
             </div>
             <hr />
             <div className='p-4 flex flex-row items-center justify-between font-semibold text-lg'>
