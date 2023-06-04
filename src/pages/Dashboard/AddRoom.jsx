@@ -23,7 +23,7 @@ const AddRoom = () => {
         const from = dates.startDate
         const to = dates.endDate
         const price = event.target.price.value
-        const total_guest = event.target.total_guest.value
+        const guests = event.target.total_guest.value
         const bedrooms = event.target.bedrooms.value
         const bathrooms = event.target.bathrooms.value
         const description = event.target.description.value
@@ -37,7 +37,7 @@ const AddRoom = () => {
                 from,
                 to,
                 price: parseFloat(price),
-                total_guest,
+                guests,
                 bedrooms,
                 bathrooms,
                 description,
