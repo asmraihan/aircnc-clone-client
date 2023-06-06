@@ -1,20 +1,24 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext } from "react"
 import { AuthContext } from "../../providers/AuthProvider"
-import { getRooms } from "../../api/rooms"
 import RoomDataRow from "../../components/Dashboard/RoomDataRow"
 import EmptyState from "../../components/Shared/EmptyState"
+import useAxiosSecure from "../../hooks/useAxiosSecure"
+import { useQuery } from "@tanstack/react-query"
 
 const MyListings = () => {
 
-  const { user } = useContext(AuthContext)
-  const [rooms, setRooms] = useState([])
-  const fetchRooms = () => {
-    getRooms(user?.email).then(data => setRooms(data))
-  }
-  useEffect(() => {
-    fetchRooms()
-  }, [user])
+  const { user, loading } = useContext(AuthContext)
+  const [axiosSecure] = useAxiosSecure()
 
+  const {data: rooms=[] , refetch } = useQuery({ 
+    queryKey: ['rooms', user?.email ], 
+    enabled: !loading, /* enabled true hole nicher fn call hobe */
+    queryFn: async()=>{
+    const res = await axiosSecure.get(`/rooms/${user?.email}`)
+    console.log('res from axios',res.data)
+    return res.data
+  } 
+})
 
   return (
     <>
@@ -75,7 +79,7 @@ const MyListings = () => {
                       rooms && rooms.map(room => <RoomDataRow
                         key={room._id}
                         room={room}
-                        fetchRooms={fetchRooms}
+                        refetch={refetch}
                       ></RoomDataRow>)
                     }
                   </tbody>

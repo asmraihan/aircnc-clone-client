@@ -28,11 +28,15 @@ export const getRoom = async(id)=>{
 }
 
 // get rooms posted by host
-export const getRooms = async(email)=>{
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/rooms/${email}`)
-    const data = await response.json()
-    return data
-}
+// export const getRooms = async(email)=>{
+//     const response = await fetch(`${import.meta.env.VITE_API_URL}/rooms/${email}`,{
+//         headers:{
+//             authorization: `Bearer ${localStorage.getItem('access-token')}`
+//         }
+//     })
+//     const data = await response.json()
+//     return data
+// }
 
 // Delete single room by id (mylistings)
 export const deleteRoom = async(id)=>{
