@@ -42,28 +42,29 @@ const RoomReservation = ({ roomData }) => {
     const handleSelect = (ranges) => {
         setValue({ ...value })
     }
-    const modalHandler = () => {
-        addBooking(bookingInfo).then(data => {
-            console.log(data)
-            updateStatus(roomData._id, true)
-                .then(data => {
-                    console.log(data)
-                    toast.success('Booking successful')
-                    navigate('/dashboard/my-bookings')
-                    closeModal()
-                })
-                .catch(err => {
-                    console.log(err)
-                    closeModal()
-                    toast.error('Booking failed')
-                })
-        }).catch(err => {
-            console.log(err)
-            closeModal()
-            toast.error('Booking failed')
-        })
-        console.log(bookingInfo)
-    }
+    // const modalHandler = () => {
+    //     addBooking(bookingInfo).then(data => {
+    //         console.log(data)
+    //         updateStatus(roomData._id, true)
+    //             .then(data => {
+    //                 console.log(data)
+    //                 toast.success('Booking successful')
+    //                 navigate('/dashboard/my-bookings')
+    //                 closeModal()
+    //             })
+    //             .catch(err => {
+    //                 console.log(err)
+    //                 closeModal()
+    //                 toast.error('Booking failed')
+    //             })
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //         closeModal()
+    //         toast.error('Booking failed')
+    //     })
+    // }
+    
     return (
         <div className='bg-white rounded-xl border-[1px] border-neutral-200 overflow-hidden'>
             <div className='flex flex-row items-center gap-1 p-4'>
@@ -87,7 +88,7 @@ const RoomReservation = ({ roomData }) => {
                 <div>Total</div>
                 <div>${totalPrice}</div>
             </div>
-            <BookingModal bookingInfo={bookingInfo} modalHandler={modalHandler} closeModal={closeModal} isOpen={isOpen} ></BookingModal>
+            <BookingModal bookingInfo={bookingInfo} closeModal={closeModal} isOpen={isOpen} ></BookingModal>
         </div>
     );
 };
